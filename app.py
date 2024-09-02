@@ -2,6 +2,7 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
+import pdfplumber
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -17,6 +18,18 @@ from ragas.metrics import (
     context_precision
 )
 from langchain_experimental.data_anonymizer import PresidioAnonymizer
+
+# Function to extract text and tables from the PDF
+def extract_text_and_tables(pdf):
+    text = ""
+    tables = []
+    with pdfplumber.open(pdf) as pdf_document:
+        # Iterate through each page in the PDF
+        for page in pdf_document.pages:
+            # Extract text and tables from the current page
+            text += page.extract_text() or ""
+            tables.extend(page.extract_tables())
+    return text, tables
 
 def main():
     # Set up the Streamlit page configuration
@@ -42,19 +55,23 @@ def main():
     pdf = st.file_uploader("Upload your PDF", type="pdf")
     
     if pdf is not None:
-        # Read the uploaded PDF
-        pdf_reader = PdfReader(pdf)
-        text = ""
-        
-        # Extract text from each page of the PDF
-        for page in pdf_reader.pages:
-            text += page.extract_text() or ""
+        # Extract text and tables from the uploaded PDF
+        text, tables = extract_text_and_tables(pdf)
         
         if text:
             # Anonymize extracted text to protect sensitive data
             anonymized_text = anonymizer.anonymize(text)
             st.write("Anonymized Text:")
             st.text(anonymized_text)
+            
+            # Display extracted tables
+            if tables:
+                st.write("Extracted Tables:")
+                for i, table in enumerate(tables):
+                    st.write(f"Table {i+1}:")
+                    st.write(table)
+            else:
+                st.write("No tables found in the PDF.")
             
             # Split the text into manageable chunks for processing
             text_splitter = CharacterTextSplitter(
