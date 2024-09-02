@@ -1,1 +1,1 @@
-# RAG_Question_Answering_bot
+# RAG_Question_Answering_ChatBot
