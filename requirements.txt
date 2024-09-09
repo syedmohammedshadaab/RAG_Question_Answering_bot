@@ -9,3 +9,5 @@ PyPDF2
 presidio-anonymizer
 presidio-analyzer
 faiss-cpu
+openai
+pandas
