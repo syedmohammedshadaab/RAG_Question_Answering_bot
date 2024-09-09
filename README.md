@@ -10,7 +10,7 @@ This project is a **RAG (Retrieval-Augmented Generation) based Q&A Chatbot** bui
 ## Tech Stack
 
 - **Streamlit**: Web-based interface for uploading PDFs and interacting with the chatbot.
-- **PyPDF2** and **pdfplumber**: Extract text and tables from PDF documents.
+- **pdfplumber**: Extract text and tables from PDF documents.
 - **LangChain**: Framework for building LLM-powered applications with a focus on RAG.
 - **FAISS**: Vector storage for efficient retrieval of relevant document chunks.
 - **OpenAI Embeddings**: Embed document chunks using the `text-embedding-ada-002` model.
