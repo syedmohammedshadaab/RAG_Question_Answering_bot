@@ -1,1 +1,11 @@
-
+streamlit
+python-dotenv
+pdfplumber
+langchain
+langchain-openai
+datasets
+ragas
+PyPDF2
+presidio-anonymizer
+presidio-analyzer
+faiss-cpu
